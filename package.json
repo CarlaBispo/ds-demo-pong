@@ -1,0 +1,32 @@
+{
+    "name": "javascript-pong",
+    "version": "1.0.0",
+    "description": "Canvas Pong",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gburnett/javascript-pong.git"
+    },
+    "keywords": [
+        "pong",
+        "game"
+    ],
+    "author": "gburnett",
+    "bugs": {
+        "url": "https://github.com/gburnett/javascript-pong/issues"
+    },
+    "homepage": "https://github.com/gburnett/javascript-pong#readme",
+    "private": true,
+    "devDependencies": {
+        "babelify": "^6.1.2",
+        "budo": "^4.1.0",
+        "garnish": "^2.1.3",
+        "opnr": "^1.0.4"
+    },
+    "licence": "MIT",
+    "scripts": {
+        "start": "budo src/bootstrap.js --live --serve index.js -- -t babelify | opnr | garnish"
+    }
+}
