@@ -70,7 +70,9 @@ if (!Object.extend) {
 // GAME
 //=============================================================================
 
-var Game = {
+var sniffer = require('./sniffer.js'),
+    keyMap = require('./keyMap.js'),
+    Game = {
 
     compatible: function() {
         return Object.create &&
@@ -85,33 +87,7 @@ var Game = {
             return Object.construct(Game.Runner, id, game, cfg).game; // return the game instance, not the runner (caller can always get at the runner via game.runner)
     },
 
-    ua: function() { // should avoid user agent sniffing... but sometimes you just gotta do what you gotta do
-        var ua  = navigator.userAgent.toLowerCase();
-        var key =        ((ua.indexOf("opera")   > -1) ? "opera"   : null);
-        key = key || ((ua.indexOf("firefox") > -1) ? "firefox" : null);
-        key = key || ((ua.indexOf("chrome")  > -1) ? "chrome"  : null);
-        key = key || ((ua.indexOf("safari")  > -1) ? "safari"  : null);
-        key = key || ((ua.indexOf("msie")    > -1) ? "ie"      : null);
-
-        try {
-            var re      = (key == "ie") ? "msie (\\d)" : key + "\\/(\\d\\.\\d)";
-            var matches = ua.match(new RegExp(re, "i"));
-            var version = matches ? parseFloat(matches[1]) : null;
-        } catch (e) {}
-
-        return {
-            full:      ua,
-            name:      key + (version ? " " + version.toString() : ""),
-            version:   version,
-            isFirefox: (key == "firefox"),
-            isChrome:  (key == "chrome"),
-            isSafari:  (key == "safari"),
-            isOpera:   (key == "opera"),
-            isIE:      (key == "ie"),
-            hasCanvas: (document.createElement('canvas').getContext),
-            hasAudio:  (typeof(Audio) != 'undefined')
-        };
-    }(),
+    ua: sniffer(),
 
     addEvent:    function(obj, type, fn) { obj.addEventListener(type, fn, false);    },
     removeEvent: function(obj, type, fn) { obj.removeEventListener(type, fn, false); },
@@ -160,31 +136,7 @@ var Game = {
         return new Date().getTime();
     },
 
-    KEY: {
-        BACKSPACE: 8,
-        TAB:       9,
-        RETURN:   13,
-        ESC:      27,
-        SPACE:    32,
-        LEFT:     37,
-        UP:       38,
-        RIGHT:    39,
-        DOWN:     40,
-        DELETE:   46,
-        HOME:     36,
-        END:      35,
-        PAGEUP:   33,
-        PAGEDOWN: 34,
-        INSERT:   45,
-        ZERO:     48,
-        ONE:      49,
-        TWO:      50,
-        A:        65,
-        L:        76,
-        P:        80,
-        Q:        81,
-        TILDA:    192
-    },
+    KEY: keyMap,
 
     //-----------------------------------------------------------------------------
 
