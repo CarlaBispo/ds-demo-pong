@@ -1,12 +1,13 @@
 //=============================================================================
 // PONG
 //=============================================================================
+const defaults = require('./pongDefaults.js');
+const colors = require('./pongColors.js');
+const images = require('./pongImages.js');
+const ai = require('./pongAI.js');
+const courtDigits = require('./pongDigits.js');
+
 var Game = require('./game.js'),
-    defaults = require('./pongDefaults.js'),
-    colors = require('./pongColors.js'),
-    images = require('./pongImages.js'),
-    ai = require('./pongAI.js'),
-    courtDigits = require('./pongDigits.js'),
     Pong = {
 
         Defaults: defaults,

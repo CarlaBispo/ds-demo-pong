@@ -69,9 +69,9 @@ if (!Object.extend) {
 //=============================================================================
 // GAME
 //=============================================================================
+const keyMap = require('./keyMap.js');
 
 var sniffer = require('./sniffer.js'),
-    keyMap = require('./keyMap.js'),
     Game = {
 
     compatible: function() {
