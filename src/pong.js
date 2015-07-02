@@ -232,9 +232,12 @@ var Game = require('./game.js'),
             },
 
             draw: function(ctx, scorePlayer1, scorePlayer2) {
+                var drawWall = function (wall) {
+                    ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+                };
+
                 ctx.fillStyle = Pong.Colors.walls;
-                for(var n = 0 ; n < this.walls.length ; n++)
-                    ctx.fillRect(this.walls[n].x, this.walls[n].y, this.walls[n].width, this.walls[n].height);
+                this.walls.forEach(drawWall);
                 this.drawDigit(ctx, scorePlayer1, this.score1.x, this.score1.y, this.score1.w, this.score1.h);
                 this.drawDigit(ctx, scorePlayer2, this.score2.x, this.score2.y, this.score2.w, this.score2.h);
             },
@@ -510,13 +513,14 @@ var Game = require('./game.js'),
             draw: function(ctx) {
                 var w = this.radius * 2;
                 var h = this.radius * 2;
+                var drawFootprint = function (footprint) {
+                    ctx.strokeRect(footprint.x - this.radius, footprint.y - this.radius, w, h);
+                }.bind(this);
                 ctx.fillStyle = Pong.Colors.ball;
                 ctx.fillRect(this.x - this.radius, this.y - this.radius, w, h);
                 if (this.pong.cfg.footprints) {
-                    var max = this.footprints.length;
                     ctx.strokeStyle = Pong.Colors.footprint;
-                    for(var n = 0 ; n < max ; n++)
-                        ctx.strokeRect(this.footprints[n].x - this.radius, this.footprints[n].y - this.radius, w, h);
+                    this.footprints.forEach(drawFootprint);
                 }
             }
 

@@ -50,7 +50,7 @@ var sniffer = require('./sniffer.js'),
             let image = document.createElement('img');
             image.src = source;
             images[source] = image;
-            Game.addEvent(image, 'load', function () { if (index === (sourcesArray.length - 1)) callback(images); });
+            Game.addEvent(image, 'load', function ifLastSource() { if (index === (sourcesArray.length - 1)) callback(images); });
         };
         
         if (count == 0) {
