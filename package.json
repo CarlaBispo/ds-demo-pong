@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "description": "Canvas Pong",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "budo src/bootstrap.js --live --serve index.js -- -t babelify | opnr | garnish",
+        "build": "browserify src/bootstrap.js -t babelify | uglifyjs > dist/bundle.js"
     },
     "repository": {
         "type": "git",
@@ -23,10 +24,8 @@
         "babelify": "^6.1.2",
         "budo": "^4.1.0",
         "garnish": "^2.1.3",
-        "opnr": "^1.0.4"
+        "opnr": "^1.0.4",
+        "uglifyjs": "^2.4.10"
     },
-    "licence": "MIT",
-    "scripts": {
-        "start": "budo src/bootstrap.js --live --serve index.js -- -t babelify | opnr | garnish"
-    }
+    "licence": "MIT"
 }
