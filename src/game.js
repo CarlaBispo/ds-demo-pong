@@ -108,7 +108,6 @@ var sniffer = require('./sniffer.js'),
             var start  = Game.timestamp(); this.update((start - this.lastFrame)/1000.0); // send dt as seconds
             var middle = Game.timestamp(); this.draw();
             var end    = Game.timestamp();
-            this.updateStats(middle - start, end - middle);
             this.lastFrame = start;
         },
 
@@ -119,7 +118,6 @@ var sniffer = require('./sniffer.js'),
         draw: function() {
             this.back2d.clearRect(0, 0, this.width, this.height);
             this.game.draw(this.back2d);
-            this.drawStats(this.back2d);
             this.front2d.clearRect(0, 0, this.width, this.height);
             this.front2d.drawImage(this.back, 0, 0);
         },

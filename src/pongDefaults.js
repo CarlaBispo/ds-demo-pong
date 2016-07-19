@@ -1,4 +1,5 @@
 module.exports = {
+    maxGoals:     9,     // amount of goals until winner is declared
     width:        640,   // logical canvas width (browser will scale to physical canvas size - which is controlled by @media css queries)
     height:       480,   // logical canvas height (ditto)
     wallWidth:    12,
