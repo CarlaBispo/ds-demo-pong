@@ -44,7 +44,8 @@ if (!Object.extend) {
 // BOOTSTRAP
 //=============================================================================
 var Game = require('./game.js'),
-    Pong = require('./pong.js');
+    Pong = require('./pong.js'),
+    QRCode = require('qrcodejs2');
 
     Game.ready(function() {
 
@@ -64,3 +65,21 @@ var Game = require('./game.js'),
         Game.addEvent(predictions, 'change', function() { pong.showPredictions(predictions.checked); });
 
     });
+
+
+var code1 = new QRCode(document.getElementById("qrcode1"), {
+text: window.location.host + '/controls#1',
+    width: 128,
+    height: 128,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+});
+var code2 = new QRCode(document.getElementById("qrcode2"), {
+text: window.location.host + '/controls#2',
+    width: 128,
+    height: 128,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+});

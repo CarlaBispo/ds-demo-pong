@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "pong with deepstream.io",
   "scripts": {
-    "start": "budo src/index.js --live --host ${SERVER_IP:-0.0.0.0} --serve index.js -- -t babelify | opnr | garnish",
+    "start": "budo src/index.js --live --host ${SERVER_IP:-0.0.0.0} --serve dist/bundle.js -- -t babelify | opnr | garnish",
     "build": "browserify src/bootstrap.js -t babelify | uglifyjs > dist/bundle.js"
   },
   "repository": {
