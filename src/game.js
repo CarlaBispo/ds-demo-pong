@@ -163,12 +163,42 @@ var sniffer = require('./sniffer.js'),
 
             const player1 = dsClient.record.getRecord('player/1')
             const player2 = dsClient.record.getRecord('player/2')
+            const status = dsClient.record.getRecord('status')
             player1.subscribe(data => {
                 this.game.updatePlayer(1, data.direction)
             })
             player2.subscribe(data => {
                 this.game.updatePlayer(2, data.direction)
             })
+            status.subscribe(data => {
+                // check for ready status
+                if ((data.player1 || {}).ready) {
+                    jQuery('.ready1').addClass('checked')
+                } else {
+                    jQuery('.ready1').removeClass('checked')
+                }
+                if ((data.player2 || {}).ready) {
+                    jQuery('.ready2').addClass('checked')
+                } else {
+                    jQuery('.ready2').removeClass('checked')
+                }
+
+                // check for game start
+                if ((data.player1 || {}).ready && (data.player2 || {}).ready) {
+                    this.game.startDoublePlayer()
+                } else if ((data.player1 || {}).ready) {
+                    this.game.startSinglePlayer()
+                    jQuery('.ready2').addClass('checked')
+                    jQuery('.ready2').text('AI')
+                } else if ((data.player1 || {}).ready === false || (data.player2 || {}).ready === false) {
+                    this.game.stop()
+                    dsClient.record.getRecord('status').set('winner', null)
+                    jQuery('.ready2').text('ready')
+                    this.start()
+                }
+            })
+        },
+
         notifyWinner: function(playerNo) {
             dsClient.record.getRecord('status').whenReady(status => {
                 status.set('winner', playerNo)
