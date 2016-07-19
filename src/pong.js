@@ -114,6 +114,31 @@ var Game = require('./game.js'),
                 this.menu.draw(ctx);
         },
 
+        updatePlayer: function(player, direction) {
+            if (player == 1) {
+                this.updatePaddle(this.leftPaddle, direction)
+            } else if (player == 2) {
+                this.updatePaddle(this.rightPaddle, direction)
+            } else {
+                console.error('player ' + player + ' is invalid')
+            }
+        },
+
+        updatePaddle: function(paddle, direction) {
+            if (!paddle.auto) {
+                if (direction === 'up') {
+                    paddle.moveUp();
+                } else if (direction === 'down') {
+                    paddle.moveDown();
+                } else if (direction === null) {
+                    paddle.stopMovingUp()
+                    paddle.stopMovingDown()
+                } else {
+                    console.error('unkown state for updating paddle', arguments)
+                }
+            }
+        },
+
         onkeydown: function(keyCode) {
             switch(keyCode) {
             case Game.KEY.ZERO: this.startDemo();            break;

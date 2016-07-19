@@ -1,7 +1,13 @@
 //=============================================================================
 // GAME
 //=============================================================================
+const deepstream = require('deepstream.io-client-js');
+const DEEPSTREAM_HOST = process.env.DEEPSTREAM_HOST || 'localhost:6020'
+const dsClient = deepstream(DEEPSTREAM_HOST).login({});
+const jQuery = require('jQuery');
 const keyMap = require('./keyMap.js');
+
+window.dsClient = dsClient; // for debugging
 
 var sniffer = require('./sniffer.js'),
     Game = {
@@ -154,6 +160,15 @@ var sniffer = require('./sniffer.js'),
         addEvents: function() {
             Game.addEvent(document, 'keydown', this.onkeydown.bind(this));
             Game.addEvent(document, 'keyup',   this.onkeyup.bind(this));
+
+            const player1 = dsClient.record.getRecord('player/1')
+            const player2 = dsClient.record.getRecord('player/2')
+            player1.subscribe(data => {
+                this.game.updatePlayer(1, data.direction)
+            })
+            player2.subscribe(data => {
+                this.game.updatePlayer(2, data.direction)
+            })
         },
 
         onkeydown: function(ev) { if (this.game.onkeydown) this.game.onkeydown(ev.keyCode); },
