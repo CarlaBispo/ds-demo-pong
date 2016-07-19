@@ -1,15 +1,35 @@
-Canvas Pong
+deepstreamio.io Pong
 ===========
 
-This is a small experiment to implement a version of the classic Pong game in an HTML <canvas>.
+This is a fork of [gburnett/javascript-pong](https://github.com/gburnett/javascript-pong) which is a fork of [jakesgordon/javascript-pong](https://github.com/jakesgordon/javascript-pong), a tutorial for implementing a Pong game.
 
- * You can find the [game here](http://codeincomplete.com/posts/2011/5/14/javascript_pong/demo.html)
- * You can find out [how it works](http://codeincomplete.com/posts/2011/5/14/javascript_pong/index.html)
-
-You can also play this game in the [Chrome Web Store](https://chrome.google.com/webstore/detail/omimkinlomnncbmnceacpkmlbfaapojj?hl=en-US)
+All frontend credits goes to [jakesgordon](https://github.com/jakesgordon).
 
 
-NOTES
-=====
+## Setup
 
- * No support for mobile devices (need to handle touch events instead of key input)
+```shell
+npm install
+# run your deepstream server with port 6020
+npm start
+```
+## Run in the network
+
+To allow users to join you need set two environment variables:
+
+###### `SERVER_IP`
+This affects the IP which will be opened in the browser, defaults to `0.0.0.0`
+This is important for the QR codes which using `window.location.host`.
+Has no effects for `npm run build`.
+
+###### `DEEPSTREAM_HOST` (with port)
+Main page and controller page will connect against this host, defaults
+to `localhost:6020`.
+
+If you want to allow users to connect to your server within your WiFi network
+just check your WiFi IP adresss by `ifconfig` or `ipconfig` use the IP for
+both environment variables, for example:
+
+```shell
+SERVER_IP=192.168.3.11 DEEPSTREAM_HOST=192.168.3.11:6020 npm start
+```
