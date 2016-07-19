@@ -1,0 +1,38 @@
+.start {
+  display: block;
+  margin: 0 auto;
+  font-family: monospace;
+  font-size: 2em;
+  position: fixed;
+  top: 0.5em;
+  left: 0;
+  right: 0;
+  width: 50%;
+}
+
+.gamepad, .indicator {
+  display: none;
+  font-size: 10em;
+  touch-action: manipulation;
+}
+
+.indicator {
+  display: block;
+  margin: 0 auto;
+  width: 15px;
+  height: 50px;
+  background: black;
+  margin-top: 0px;
+}
+
+.gamepad-container {
+  padding: 50px;
+}
+
+#down {
+  float: right;
+}
+
+#up, #down {
+  touch-action: manipulation;
+}
