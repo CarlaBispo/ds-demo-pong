@@ -1,31 +1,36 @@
 {
-    "name": "javascript-pong",
-    "version": "1.0.0",
-    "description": "Canvas Pong",
-    "scripts": {
-        "start": "budo src/bootstrap.js --live --serve index.js -- -t babelify | opnr | garnish",
-        "build": "browserify src/bootstrap.js -t babelify | uglifyjs > dist/bundle.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/gburnett/javascript-pong.git"
-    },
-    "keywords": [
-        "pong",
-        "game"
-    ],
-    "author": "gburnett",
-    "bugs": {
-        "url": "https://github.com/gburnett/javascript-pong/issues"
-    },
-    "homepage": "https://github.com/gburnett/javascript-pong#readme",
-    "private": true,
-    "devDependencies": {
-        "babelify": "^6.1.2",
-        "budo": "^4.1.0",
-        "garnish": "^2.1.3",
-        "opnr": "^1.0.4",
-        "uglifyjs": "^2.4.10"
-    },
-    "licence": "MIT"
+  "name": "deepstream-pong",
+  "version": "1.0.0",
+  "description": "pong with deepstream.io",
+  "scripts": {
+    "start": "budo src/index.js --live --host ${SERVER_IP:-0.0.0.0} --serve index.js -- -t babelify | opnr | garnish",
+    "build": "browserify src/bootstrap.js -t babelify | uglifyjs > dist/bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepstreamIO/ds-demo-pong.git"
+  },
+  "keywords": [
+    "pong",
+    "game",
+    "deepstream",
+    "deepstream.io",
+    "realtime"
+  ],
+  "author": "Anton Wilhelm",
+  "bugs": {
+    "url": "https://github.com/deepstreamIO/ds-demo-pong/issues"
+  },
+  "homepage": "https://github.com/deepstreamIO/ds-demo-pong#readme",
+  "private": true,
+  "devDependencies": {
+    "babelify": "^6.1.2",
+    "budo": "^4.1.0",
+    "garnish": "^2.1.3",
+    "opnr": "^1.0.4",
+    "uglifyjs": "^2.4.10"
+  },
+  "licence": "MIT",
+  "dependencies": {
+  }
 }
