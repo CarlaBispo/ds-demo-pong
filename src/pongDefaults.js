@@ -9,5 +9,6 @@ module.exports = {
     ballSpeed:    4,     // should be able to cross court horizontally in 4 seconds, at starting speed ...
     ballAccel:    8,     // ... but accelerate as time passes
     ballRadius:   5,
-    sound:        true
+    sound:        true,
+    tiltFactor:   2.0
 };

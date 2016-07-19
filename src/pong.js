@@ -115,19 +115,21 @@ var Game = require('./game.js'),
                 this.menu.draw(ctx);
         },
 
-        updatePlayer: function(player, direction) {
+        updatePlayer: function(player, direction, position) {
             if (player == 1) {
-                this.updatePaddle(this.leftPaddle, direction)
+                this.updatePaddle(this.leftPaddle, direction, position)
             } else if (player == 2) {
-                this.updatePaddle(this.rightPaddle, direction)
+                this.updatePaddle(this.rightPaddle, direction, position)
             } else {
                 console.error('player ' + player + ' is invalid')
             }
         },
 
-        updatePaddle: function(paddle, direction) {
+        updatePaddle: function(paddle, direction, position) {
             if (!paddle.auto) {
-                if (direction === 'up') {
+                if (position != null) {
+                    this.setPaddlePosition(paddle, position)
+                } else if (direction === 'up') {
                     paddle.moveUp();
                 } else if (direction === 'down') {
                     paddle.moveDown();
@@ -138,6 +140,20 @@ var Game = require('./game.js'),
                     console.error('unkown state for updating paddle', arguments)
                 }
             }
+        },
+
+        setPaddlePosition: function(paddle, y) {
+            const HEIGHT = defaults.height - defaults.paddleHeight - defaults.wallWidth
+            // use a factor to reach upper and lower border easier, without tilting the device extremely
+            const FACTOR = defaults.tiltFactor
+            const AMPLIFIED = HEIGHT * (1 + FACTOR)
+            let absolute = Math.round((y * AMPLIFIED) - HEIGHT * (FACTOR / 2) )
+            if (absolute > HEIGHT) {
+                absolute = HEIGHT
+            } else if (absolute < defaults.wallWidth) {
+                absolute = defaults.wallWidth
+            }
+            paddle.setpos(paddle.x, absolute);
         },
 
         onkeydown: function(keyCode) {

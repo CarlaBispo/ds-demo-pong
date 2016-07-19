@@ -165,10 +165,10 @@ var sniffer = require('./sniffer.js'),
             const player2 = dsClient.record.getRecord('player/2')
             const status = dsClient.record.getRecord('status')
             player1.subscribe(data => {
-                this.game.updatePlayer(1, data.direction)
+                this.game.updatePlayer(1, data.direction, data.position)
             })
             player2.subscribe(data => {
-                this.game.updatePlayer(2, data.direction)
+                this.game.updatePlayer(2, data.direction, data.position)
             })
             status.subscribe(data => {
                 // check for ready status
