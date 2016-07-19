@@ -74,6 +74,7 @@ var Game = require('./game.js'),
             this.scores[playerNo] += 1;
             if (this.scores[playerNo] == defaults.maxGoals) {
                 this.menu.declareWinner(playerNo);
+                this.runner.notifyWinner(playerNo + 1);
                 this.stop();
             }
             else {

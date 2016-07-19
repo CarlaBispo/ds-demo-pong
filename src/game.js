@@ -169,6 +169,10 @@ var sniffer = require('./sniffer.js'),
             player2.subscribe(data => {
                 this.game.updatePlayer(2, data.direction)
             })
+        notifyWinner: function(playerNo) {
+            dsClient.record.getRecord('status').whenReady(status => {
+                status.set('winner', playerNo)
+            })
         },
 
         onkeydown: function(ev) { if (this.game.onkeydown) this.game.onkeydown(ev.keyCode); },
