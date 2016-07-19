@@ -166,14 +166,14 @@ var sniffer = require('./sniffer.js'),
 
         alert: function(msg) {
             this.stop(); // alert blocks thread, so need to stop game loop in order to avoid sending huge dt values to next update
-            result = window.alert(msg);
+            var result = window.alert(msg);
             this.start();
             return result;
         },
 
         confirm: function(msg) {
             this.stop(); // alert blocks thread, so need to stop game loop in order to avoid sending huge dt values to next update
-            result = window.confirm(msg);
+            var result = window.confirm(msg);
             this.start();
             return result;
         }
