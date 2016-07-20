@@ -6,12 +6,13 @@ This is a fork of [gburnett/javascript-pong](https://github.com/gburnett/javascr
 All frontend credits goes to [jakesgordon](https://github.com/jakesgordon).
 
 
+
 ## Setup
 
 ```shell
 npm install
-# run your deepstream server with port 6020
-npm start
+npm run deepstream # in a terminal
+npm start # in another terminal
 ```
 ## Run in the network
 
@@ -31,5 +32,5 @@ just check your WiFi IP adresss by `ifconfig` or `ipconfig` use the IP for
 both environment variables, for example:
 
 ```shell
-SERVER_IP=192.168.3.11 DEEPSTREAM_HOST=192.168.3.11:6020 npm start
+SERVER_IP= 192.168.43.213 DEEPSTREAM_HOST= 192.168.43.213:6020 npm start
 ```

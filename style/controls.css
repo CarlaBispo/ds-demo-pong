@@ -1,4 +1,23 @@
-.start {
+html {
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
+
+body {
+  background: #ccc;
+}
+
+.start-stop {
   display: block;
   margin: 0 auto;
   font-family: monospace;
@@ -13,7 +32,6 @@
 .gamepad, .indicator {
   display: none;
   font-size: 10em;
-  touch-action: manipulation;
 }
 
 .indicator {
@@ -29,10 +47,6 @@
   padding: 50px;
 }
 
-#down {
+.gamepad-down {
   float: right;
-}
-
-#up, #down {
-  touch-action: manipulation;
 }

@@ -1,63 +1,64 @@
 const deepstream = require('deepstream.io-client-js')
-const jQuery = require('jquery')
 const defaults = require('../pongDefaults')
 const keyMap = require('../keyMap.js');
 const IS_TOUCH_DEVICE = 'ontouchstart' in window
 const FACTOR = defaults.tiltFactor;
-
-window.jQuery = jQuery // for debugging
-
+const once = require('once-event-listener')
 var gamepad = null
 var player = window.location.hash.substr(1) || 1
 
 class Gamepad {
   constructor() {
-    this._oldValue = 999;
-    this._record = null;
-    this._area = jQuery('.gamepad');
-    this._area.on('touchstart mousedown', this._onButtonPress.bind(this));
-    this._area.on('mouseup touchend', this._onBUttonRelease.bind(this));
-    this.$indicator = jQuery('.indicator')
-    jQuery('.start').one('click', this.startGameHandler.bind(this));
+    this.oldValue = 999;
+    this.record = null;
+    this.buttons = document.querySelectorAll('.gamepad');
+    this.buttons[0].addEventListener('touchstart mousedown', this.onButtonPress.bind(this));
+    this.buttons[1].addEventListener('touchstart mousedown', this.onButtonPress.bind(this));
+    this.buttons[0].addEventListener('mouseup touchend', this.onButtonRelease.bind(this));
+    this.buttons[1].addEventListener('mouseup touchend', this.onButtonRelease.bind(this));
+    this.indicator = document.querySelector('.indicator')
+    once(document.querySelector('.start-stop'), 'click', this.startGameHandler.bind(this));
     if (IS_TOUCH_DEVICE && window.DeviceMotionEvent != null) {
-      this.indicatorHeight = this.$indicator.height()
-      window.addEventListener('devicemotion', this._listenOnMotion.bind(this), false);
-      jQuery('.gamepad-container').hide();
+      this.indicatorHeight = this.indicator.style.height
+      window.addEventListener('devicemotion', this.listenOnMotion.bind(this), false);
+      document.querySelector('.gamepad-container').style.display = 'none'
     } else {
-      this.$indicator.hide();
-      jQuery('button').show();
-      jQuery(document.body).keydown(this.onkeydown.bind(this))
-      jQuery(document.body).keyup(this.onkeyup.bind(this))
+      this.indicator.style.display = 'none'
+      document.querySelector('button').style.display = ''
+      document.body.addEventListener('keydown', this.onkeydown.bind(this))
+      document.body.addEventListener('keyup', this.onkeyup.bind(this))
     }
   }
 
   onkeydown(e) {
     if (e.keyCode === keyMap.Q) {
-      this._update('up')
+      this.update('up')
     } else if (e.keyCode === keyMap.A) {
-      this._update('down')
+      this.update('down')
     }
   }
 
   onkeyup(e) {
-    this._onBUttonRelease()
+    this.onButtonRelease()
   }
 
   startGameHandler(e) {
+    const element = e.target
     ds.record.getRecord('status').whenReady(record => {
       record.set('player' + player + '.ready', true)
-      e.target.textContent = 'stop'
+      element.textContent = 'stop'
       record.subscribe(data => {
         if (data.winner == null || data['player' + player + '.ready'] == false) {
-          jQuery(document.body).css('background', 'white')
+          document.body.style.background = 'white'
         } else if ( data.winner == player) {
-          jQuery(document.body).css('background', 'green')
+          debugger
+          document.body.style.background = 'green'
         } else {
-          jQuery(document.body).css('background', 'red')
+          document.body.style.background ='red'
         }
       })
     })
-    jQuery('.start').one('click', this.stopGameHandler.bind(this));
+    once(document.querySelector('.start-stop'), 'click', this.stopGameHandler.bind(this));
   }
 
   stopGameHandler(e) {
@@ -65,24 +66,23 @@ class Gamepad {
       record.set('player' + player + '.ready', false)
       e.target.textContent = 'start'
     })
-    jQuery('.start').one('click', this.startGameHandler.bind(this));
+    once(document.querySelector('.start-stop'), 'click', this.startGameHandler.bind(this));
   }
 
   setRecord(record) {
-    this._record = record;
+    this.record = record;
   }
 
-  _listenOnMotion(e) {
+  listenOnMotion(e) {
     if (e.accelerationIncludingGravity.y == null) {
-      jQuery(document.body).css('background', 'red');
-      return
+      return document.body.style.background ='red';
     }
     const landscapeOrientation = window.innerWidth / window.innerHeight > 1;
     const value = landscapeOrientation ? e.accelerationIncludingGravity.x : e.accelerationIncludingGravity.y;
-    if (Math.abs(this._oldValue - value) <= 0.3) {
+    if (Math.abs(this.oldValue - value) <= defaults.accelerationThreshold) {
       return
     }
-    this._oldValue = value;
+    this.oldValue = value;
     const percentage = 1 - ((value / 10) + 1) / 2;
     const HEIGHT = window.innerHeight
     const AMPLIFIED = HEIGHT * (1 + FACTOR)
@@ -92,24 +92,24 @@ class Gamepad {
     } else if (margin > window.innerHeight - this.indicatorHeight) {
       margin = window.innerHeight - this.indicatorHeight
     }
-    this.$indicator.css('margin-top', margin + 'px')
+    this.indicator.style['margin-top'] = margin + 'px'
     if (value > 0) {
-      this._update('down', percentage)
+      this.update('down', percentage)
     } else {
-      this._update('up', percentage)
+      this.update('up', percentage)
     }
   }
 
-  _update(direction, position) {
-    this._record.set('moving', true);
+  update(direction, position) {
+    this.record.set('moving', true);
     if (position != null) {
-      this._record.set('position', position);
+      this.record.set('position', position);
     } else {
-      this._record.set('direction', direction);
+      this.record.set('direction', direction);
     }
   }
 
-  _onButtonPress(event) {
+  onButtonPress(event) {
     event.preventDefault()
     const target = event.target
     const up = target.classList.contains('gamepad-up')
@@ -122,12 +122,12 @@ class Gamepad {
     } else {
       direction = null
     }
-    this._update(direction)
+    this.update(direction)
   }
 
-  _onBUttonRelease() {
-    this._record.set('moving', false);
-    this._record.set('direction', null);
+  onButtonRelease() {
+    this.record.set('moving', false);
+    this.record.set('direction', null);
   }
 }
 
@@ -136,11 +136,11 @@ const ds = deepstream(DEEPSTREAM_HOST).login({}, function() {
   startApp(ds)
 })
 
-jQuery(window).on('beforeunload', function(){
+window.beforeunload = function() {
   ds.record.getRecord('status').whenReady(record => {
-    record.set('player' + player + '.ready', false)
-  })
-});
+    record.set('player' + player + '.ready', false);
+  });
+};
 
 function startApp(ds) {
   window.ds = ds
@@ -160,4 +160,3 @@ function joinGame() {
     gamepad.setRecord(record);
   });
 }
-

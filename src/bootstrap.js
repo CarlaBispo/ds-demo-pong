@@ -66,20 +66,16 @@ var Game = require('./game.js'),
 
     });
 
-
-var code1 = new QRCode(document.getElementById("qrcode1"), {
-text: window.location.host + '/controls#1',
-    width: 128,
-    height: 128,
-    colorDark : "#000000",
-    colorLight : "#ffffff",
-    correctLevel : QRCode.CorrectLevel.H
-});
-var code2 = new QRCode(document.getElementById("qrcode2"), {
-text: window.location.host + '/controls#2',
-    width: 128,
-    height: 128,
-    colorDark : "#000000",
-    colorLight : "#ffffff",
-    correctLevel : QRCode.CorrectLevel.H
-});
+const options = {
+  width: 128,
+  height: 128,
+  colorDark : "#000000",
+  colorLight : "#ffffff",
+  correctLevel : QRCode.CorrectLevel.H
+}
+new QRCode(document.getElementById("qrcode1"), Object.assign({
+  text: window.location.host + '/controls#1'
+}, options))
+new QRCode(document.getElementById("qrcode2"), Object.assign({
+  text: window.location.host + '/controls#2'
+}, options))

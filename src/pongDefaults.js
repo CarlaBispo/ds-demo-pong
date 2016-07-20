@@ -10,5 +10,6 @@ module.exports = {
     ballAccel:    8,     // ... but accelerate as time passes
     ballRadius:   5,
     sound:        true,
-    tiltFactor:   2.0
+    tiltFactor:   2.0,          // amplify axial tilt
+    accelerationThreshold: 0.3  // ignore changes less than this threshold
 };

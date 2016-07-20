@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "deepstream.io Pong",
   "scripts": {
-    "start": "budo src/index.js --live --host ${SERVER_IP:-0.0.0.0} --serve dev-bundle.js -- -t babelify -t envify | opnr | garnish",
+    "deepstream": "deepstream start -c node_modules/deepstream.io/conf/config.yml",
+    "start": "budo src/index.js --live --host ${SERVER_IP:-0.0.0.0} --serve dist/bundle.js -- -t babelify -t envify | opnr | garnish",
     "build": "browserify src/bootstrap.js -t babelify -t envify | uglifyjs > dist/bundle.js"
   },
   "repository": {
@@ -30,8 +31,10 @@
   },
   "licence": "MIT",
   "dependencies": {
+    "deepstream.io": "^1.0.2",
     "deepstream.io-client-js": "^1.0.0",
-    "jquery": "^3.1.0",
+    "once-event-listener": "^1.0.0",
+    "onetime": "^1.1.0",
     "qrcodejs2": "0.0.2"
   }
 }

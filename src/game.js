@@ -4,7 +4,6 @@
 const deepstream = require('deepstream.io-client-js');
 const DEEPSTREAM_HOST = process.env.DEEPSTREAM_HOST || 'localhost:6020'
 const dsClient = deepstream(DEEPSTREAM_HOST).login({});
-const jQuery = require('jQuery');
 const keyMap = require('./keyMap.js');
 
 window.dsClient = dsClient; // for debugging
@@ -58,7 +57,7 @@ var sniffer = require('./sniffer.js'),
             images[source] = image;
             Game.addEvent(image, 'load', function ifLastSource() { if (index === (sourcesArray.length - 1)) callback(images); });
         };
-        
+
         if (count == 0) {
             callback(images);
         } else {
@@ -173,14 +172,14 @@ var sniffer = require('./sniffer.js'),
             status.subscribe(data => {
                 // check for ready status
                 if ((data.player1 || {}).ready) {
-                    jQuery('.ready1').addClass('checked')
+                    document.querySelector('.ready1').classList.add('checked')
                 } else {
-                    jQuery('.ready1').removeClass('checked')
+                    document.querySelector('.ready1').classList.remove('checked')
                 }
                 if ((data.player2 || {}).ready) {
-                    jQuery('.ready2').addClass('checked')
+                    document.querySelector('.ready2').classList.add('checked')
                 } else {
-                    jQuery('.ready2').removeClass('checked')
+                    document.querySelector('.ready2').classList.remove('checked')
                 }
 
                 // check for game start
@@ -188,12 +187,12 @@ var sniffer = require('./sniffer.js'),
                     this.game.startDoublePlayer()
                 } else if ((data.player1 || {}).ready) {
                     this.game.startSinglePlayer()
-                    jQuery('.ready2').addClass('checked')
-                    jQuery('.ready2').text('AI')
+                    document.querySelector('.ready2').classList.add('checked')
+                    document.querySelector('.ready2').textContent = 'AI'
                 } else if ((data.player1 || {}).ready === false || (data.player2 || {}).ready === false) {
                     this.game.stop()
                     dsClient.record.getRecord('status').set('winner', null)
-                    jQuery('.ready2').text('ready')
+                    document.querySelector('.ready2').textContent = 'ready'
                     this.start()
                 }
             })
