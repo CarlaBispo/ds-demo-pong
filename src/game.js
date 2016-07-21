@@ -2,14 +2,50 @@
 // GAME
 //=============================================================================
 const deepstream = require('deepstream.io-client-js');
+const QRCode = require('qrcodejs2');
+const utils = require('./utils')
 const DEEPSTREAM_HOST = process.env.DEEPSTREAM_HOST || window.location.hostname + ':6020'
-const dsClient = deepstream(DEEPSTREAM_HOST).login({});
+const client = deepstream(DEEPSTREAM_HOST)
 const keyMap = require('./keyMap.js');
+const sniffer = require('./sniffer.js');
+const GAME_ID = utils.getQueryStringAsObject().gameId
 
-window.dsClient = dsClient; // for debugging
+client.login({}, (success) => {
+    if (success) {
+        if (window.location.search.indexOf('gameId') === -1) {
+            return window.location.search = 'gameId=' + client.getUid().split('-')[1]
+        }
+        initializeQrCodes()
+    } else {
+        alert('Could not connect to deepstream server')
+        console.error(arguments)
+    }
+});
+window.dsClient = client; // for debugging
 
-var sniffer = require('./sniffer.js'),
-    Game = {
+
+function initializeQrCodes() {
+    const options = {
+      width: 128,
+      height: 128,
+      colorDark : "#000000",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    }
+    const code1Element = document.getElementById("qrcode1")
+    const code2Element = document.getElementById("qrcode2")
+    code1Element.parentNode.href = code1Element.parentNode.href.replace('controls', `controls?gameId=${GAME_ID}`)
+    code2Element.parentNode.href = code2Element.parentNode.href.replace('controls', `controls?gameId=${GAME_ID}`)
+
+    new QRCode(code1Element, Object.assign({
+      text: window.location.origin + `/controls?gameId=${GAME_ID}#1`
+    }, options))
+    new QRCode(code2Element, Object.assign({
+      text: window.location.origin + `/controls?gameId=${GAME_ID}#2`
+    }, options))
+}
+
+var Game = {
 
     compatible: function() {
         return Object.create &&
@@ -160,8 +196,8 @@ var sniffer = require('./sniffer.js'),
             Game.addEvent(document, 'keydown', this.onkeydown.bind(this));
             Game.addEvent(document, 'keyup',   this.onkeyup.bind(this));
 
-            const player1 = dsClient.record.getRecord('player/1')
-            const player2 = dsClient.record.getRecord('player/2')
+            const player1 = client.record.getRecord(GAME_ID + '-player/1')
+            const player2 = client.record.getRecord(GAME_ID + '-player/2')
             player1.subscribe(data => {
                 this.game.updatePlayer(1, data)
             })
@@ -169,24 +205,23 @@ var sniffer = require('./sniffer.js'),
                 this.game.updatePlayer(2, data)
             })
 
-            const status = dsClient.record.getRecord('status')
-            status.subscribe('player1-online', online => {
+            this.statusRecord = client.record.getRecord(GAME_ID + '-status')
+            this.statusRecord.subscribe('player1-online', online => {
               this.toggleChecked('.online-1', online)
-              this.updateGameStatus(online, status.get('player2-online'))
+              this.updateGameStatus(online, this.statusRecord.get('player2-online'))
             })
-            status.subscribe('player2-online', online => {
+            this.statusRecord.subscribe('player2-online', online => {
               this.toggleChecked('.online-2', online)
-              this.updateGameStatus(status.get('player1-online'), online)
+              this.updateGameStatus(this.statusRecord.get('player1-online'), online)
             })
         },
 
         notifyGoal: function(playerNo, goals, lastGoal) {
-            const statusRecord = dsClient.record.getRecord('status')
             if (lastGoal) {
-              statusRecord.set('player1-online', false)
-              statusRecord.set('player2-online', false)
+              this.statusRecord.set('player1-online', false)
+              this.statusRecord.set('player2-online', false)
             }
-            statusRecord.set(`player${playerNo+1}-goals`, {amount: goals, lastGoal: lastGoal})
+            this.statusRecord.set(`player${playerNo+1}-goals`, {amount: goals, lastGoal: lastGoal})
         },
 
         updateGameStatus: function(player1, player2) {

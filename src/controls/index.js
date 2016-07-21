@@ -1,18 +1,19 @@
 const deepstream = require('deepstream.io-client-js')
 const defaults = require('../pongDefaults')
 const keyMap = require('../keyMap.js')
+const utils = require('../utils')
 const IS_TOUCH_DEVICE = 'ontouchstart' in window
 const FACTOR = defaults.tiltFactor;
+const GAME_ID = utils.getQueryStringAsObject().gameId
 
 const DEEPSTREAM_HOST = process.env.DEEPSTREAM_HOST || window.location.hostname + ':6020'
 const player = window.location.hash.substr(1) || 1
 const otherPlayer = player == 1 ? 2 : 1
-console.log('other player', otherPlayer)
 
 class Gamepad {
   constructor() {
     const buttons = document.querySelectorAll('.gamepad')
-    this.initializeRecords('player/' + player)
+    this.initializeRecords()
      // accelerometer
     this.indicator = document.querySelector('.accelerometer-indicator')
     if (IS_TOUCH_DEVICE && window.DeviceMotionEvent != null) {
@@ -36,6 +37,47 @@ class Gamepad {
     // online button
     this.joinButton = document.querySelector('.join-leave')
     this.addEventListener(this.joinButton, ['click'], this.startStopGameHandler)
+  }
+
+  initializeRecords(playerRecordName) {
+    this.record = client.record.getRecord(GAME_ID + '-player/' + player)
+    this.record.whenReady(record => {
+      record.set({
+        name: player,
+        direction: null
+      })
+    })
+    const statusRecord = client.record.getRecord(GAME_ID + '-status')
+    statusRecord.subscribe(`player${player}-online`, online => {
+      if (online === true) {
+        document.body.style.background = '#ccc'
+        this.joinButton.textContent = 'leave'
+      } else {
+        document.body.style.background = 'white'
+        this.joinButton.textContent = 'join'
+      }
+    }, true)
+    statusRecord.subscribe(`player${player}-goals`, data => {
+      if ('vibrate' in navigator) {
+        if (data.lastGoal) {
+          navigator.vibrate([100, 300, 100, 300, 100])
+          document.body.style.background = 'green'
+        } else {
+          navigator.vibrate(100)
+        }
+      }
+    })
+    statusRecord.subscribe(`player${otherPlayer}-goals`, data => {
+      if (data.lastGoal) {
+        document.body.style.background = 'red'
+      }
+    })
+  }
+
+  addEventListener(element, types, handler) {
+    for (let i=0; i<types.length; i++) {
+      element.addEventListener(types[i], handler.bind(this))
+    }
   }
 
   listenOnMotion(e) {
@@ -63,12 +105,6 @@ class Gamepad {
     this.record.set('position', percentage);
   }
 
-  addEventListener(element, types, handler) {
-    for (let i=0; i<types.length; i++) {
-      element.addEventListener(types[i], handler.bind(this))
-    }
-  }
-
   onkeydown(e) {
     if (e.keyCode === keyMap.Q) {
       this.update('up')
@@ -79,42 +115,6 @@ class Gamepad {
 
   onkeyup(e) {
     this.onButtonRelease()
-  }
-
-  initializeRecords(playerRecordName) {
-    // initialize player record
-    this.record = ds.record.getRecord(playerRecordName)
-    this.record.whenReady(record => {
-      record.set({
-        name: player,
-        direction: null
-      })
-    })
-    const statusRecord = ds.record.getRecord('status')
-    statusRecord.subscribe(`player${player}-online`, online => {
-      if (online === true) {
-        document.body.style.background = '#ccc'
-        this.joinButton.textContent = 'leave'
-      } else {
-        document.body.style.background = 'white'
-        this.joinButton.textContent = 'join'
-      }
-    }, true)
-    statusRecord.subscribe(`player${player}-goals`, data => {
-      if ('vibrate' in navigator) {
-        if (data.lastGoal) {
-          navigator.vibrate([100, 300, 100, 300, 100])
-          document.body.style.background = 'green'
-        } else {
-          navigator.vibrate(100)
-        }
-      }
-    })
-    statusRecord.subscribe(`player${otherPlayer}-goals`, data => {
-      if (data.lastGoal) {
-        document.body.style.background = 'red'
-      }
-    })
   }
 
   onButtonPress(event) {
@@ -142,7 +142,7 @@ class Gamepad {
   }
 
   startStopGameHandler(e) {
-    ds.record.getRecord('status').whenReady(statusRecord => {
+    client.record.getRecord(GAME_ID + '-status').whenReady(statusRecord => {
       const oldValue = statusRecord.get(`player${player}-online`)
       statusRecord.set(`player${player}-online`, !oldValue)
       statusRecord.discard()
@@ -151,10 +151,11 @@ class Gamepad {
 }
 
 // ignore authentication
-const ds = deepstream(DEEPSTREAM_HOST).login({}, function(success) {
-  window.ds = ds
+const client = deepstream(DEEPSTREAM_HOST).login({}, function(success) {
+  window.dsClient = client
   if (success) {
     return new Gamepad()
   }
-  console.error('Could not connect to deepstream server')
+  alert('Could not connect to deepstream server')
+  console.error(arguments)
 })
