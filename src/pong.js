@@ -7,6 +7,8 @@ const images = require('./pongImages.js');
 const ai = require('./pongAI.js');
 const courtDigits = require('./pongDigits.js');
 
+const TILT_FACTOR = defaults.tiltFactor;
+
 var Game = require('./game.js'),
     Pong = {
 
@@ -116,17 +118,20 @@ var Game = require('./game.js'),
                 this.menu.draw(ctx);
         },
 
-        updatePlayer: function(player, direction) {
+        updatePlayer: function(player, data) {
             if (player == 1) {
-                this.updatePaddle(this.leftPaddle, direction)
+                this.updatePaddle(this.leftPaddle, data)
             } else if (player == 2) {
-                this.updatePaddle(this.rightPaddle, direction)
+                this.updatePaddle(this.rightPaddle, data)
             }
         },
 
-        updatePaddle: function(paddle, direction) {
+        updatePaddle: function(paddle, data) {
+            const direction = data.direction
             if (!paddle.auto) {
-                if (direction === 'up') {
+                if (data.position != null) {
+                  this.setPaddlePosition(paddle, data.position)
+                } else if (direction === 'up') {
                     paddle.moveUp();
                 } else if (direction === 'down') {
                     paddle.moveDown();
@@ -137,17 +142,16 @@ var Game = require('./game.js'),
             }
         },
 
-        setPaddlePosition: function(paddle, y) {
-            const HEIGHT = defaults.height - defaults.paddleHeight - defaults.wallWidth
-            const FACTOR = defaults.tiltFactor
-            const AMPLIFIED = HEIGHT * (1 + FACTOR)
-            let absolute = Math.round((y * AMPLIFIED) - HEIGHT * (FACTOR / 2) )
-            if (absolute > HEIGHT) {
-                absolute = HEIGHT
-            } else if (absolute < defaults.wallWidth) {
+        setPaddlePosition: function(paddle, percentage) {
+            const height = defaults.height - defaults.paddleHeight - defaults.wallWidth
+            const amplified = height * (1 + TILT_FACTOR)
+            let absolute = Math.round((percentage * amplified) - height * (TILT_FACTOR / 2))
+            if (absolute < defaults.wallWidth) {
                 absolute = defaults.wallWidth
+            } else if (absolute > height) {
+                absolute = height
             }
-            paddle.setpos(paddle.x, absolute);
+            paddle.setpos(paddle.x, absolute)
         },
 
         onkeydown: function(keyCode) {

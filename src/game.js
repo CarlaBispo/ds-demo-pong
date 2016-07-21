@@ -2,7 +2,7 @@
 // GAME
 //=============================================================================
 const deepstream = require('deepstream.io-client-js');
-const DEEPSTREAM_HOST = process.env.DEEPSTREAM_HOST || 'localhost:6020'
+const DEEPSTREAM_HOST = process.env.DEEPSTREAM_HOST || window.location.hostname + ':6020'
 const dsClient = deepstream(DEEPSTREAM_HOST).login({});
 const keyMap = require('./keyMap.js');
 
@@ -163,10 +163,10 @@ var sniffer = require('./sniffer.js'),
             const player1 = dsClient.record.getRecord('player/1')
             const player2 = dsClient.record.getRecord('player/2')
             player1.subscribe(data => {
-                this.game.updatePlayer(1, data.direction)
+                this.game.updatePlayer(1, data)
             })
             player2.subscribe(data => {
-                this.game.updatePlayer(2, data.direction)
+                this.game.updatePlayer(2, data)
             })
 
             const status = dsClient.record.getRecord('status')
