@@ -22,8 +22,8 @@ body { background-color: black; color: #AAA; font-size: 12pt; padding: 1em; }
 .settings-container .description           { margin-bottom: 2em; }
 .settings-container .description b         { font-weight: normal; color: #FFF; }
 .qrcode                                    { margin: 1em auto; width: 128px; }
-.ready                                     { text-align: center; color: #eee;}
-.ready.checked                             { color: #000; }
+.online                                     { text-align: center; color: #eee;}
+.online.checked                             { color: #000; }
 
 @media screen and (min-width: 0px) {
   .sidebar { display: none; }

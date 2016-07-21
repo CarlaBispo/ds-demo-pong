@@ -13,11 +13,7 @@ html {
                                   not supported by any browser */
 }
 
-body {
-  background: #ccc;
-}
-
-.start-stop {
+.join-leave {
   display: block;
   margin: 0 auto;
   font-family: monospace;
@@ -26,11 +22,11 @@ body {
   top: 0.5em;
   left: 0;
   right: 0;
-  width: 50%;
+  width: 5em;
+  text-transform: uppercase;
 }
 
-.gamepad, .indicator {
-  display: none;
+.gamepad {
   font-size: 10em;
 }
 
@@ -47,6 +43,6 @@ body {
   padding: 50px;
 }
 
-.gamepad-down {
+.gamepad-up {
   float: right;
 }

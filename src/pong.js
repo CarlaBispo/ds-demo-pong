@@ -72,9 +72,10 @@ var Game = require('./game.js'),
         goal: function(playerNo) {
             this.sounds.goal();
             this.scores[playerNo] += 1;
-            if (this.scores[playerNo] == defaults.maxGoals) {
+            const lastGoal = this.scores[playerNo] == defaults.maxGoals
+            this.runner.notifyGoal(playerNo, this.scores[playerNo], lastGoal);
+            if (lastGoal) {
                 this.menu.declareWinner(playerNo);
-                this.runner.notifyWinner(playerNo + 1);
                 this.stop();
             }
             else {
@@ -115,36 +116,29 @@ var Game = require('./game.js'),
                 this.menu.draw(ctx);
         },
 
-        updatePlayer: function(player, direction, position) {
+        updatePlayer: function(player, direction) {
             if (player == 1) {
-                this.updatePaddle(this.leftPaddle, direction, position)
+                this.updatePaddle(this.leftPaddle, direction)
             } else if (player == 2) {
-                this.updatePaddle(this.rightPaddle, direction, position)
-            } else {
-                console.error('player ' + player + ' is invalid')
+                this.updatePaddle(this.rightPaddle, direction)
             }
         },
 
-        updatePaddle: function(paddle, direction, position) {
+        updatePaddle: function(paddle, direction) {
             if (!paddle.auto) {
-                if (position != null) {
-                    this.setPaddlePosition(paddle, position)
-                } else if (direction === 'up') {
+                if (direction === 'up') {
                     paddle.moveUp();
                 } else if (direction === 'down') {
                     paddle.moveDown();
                 } else if (direction === null) {
                     paddle.stopMovingUp()
                     paddle.stopMovingDown()
-                } else {
-                    console.error('unkown state for updating paddle', arguments)
                 }
             }
         },
 
         setPaddlePosition: function(paddle, y) {
             const HEIGHT = defaults.height - defaults.paddleHeight - defaults.wallWidth
-            // use a factor to reach upper and lower border easier, without tilting the device extremely
             const FACTOR = defaults.tiltFactor
             const AMPLIFIED = HEIGHT * (1 + FACTOR)
             let absolute = Math.round((y * AMPLIFIED) - HEIGHT * (FACTOR / 2) )

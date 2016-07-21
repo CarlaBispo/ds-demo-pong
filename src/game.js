@@ -162,46 +162,45 @@ var sniffer = require('./sniffer.js'),
 
             const player1 = dsClient.record.getRecord('player/1')
             const player2 = dsClient.record.getRecord('player/2')
-            const status = dsClient.record.getRecord('status')
             player1.subscribe(data => {
-                this.game.updatePlayer(1, data.direction, data.position)
+                this.game.updatePlayer(1, data.direction)
             })
             player2.subscribe(data => {
-                this.game.updatePlayer(2, data.direction, data.position)
+                this.game.updatePlayer(2, data.direction)
             })
-            status.subscribe(data => {
-                // check for ready status
-                if ((data.player1 || {}).ready) {
-                    document.querySelector('.ready1').classList.add('checked')
-                } else {
-                    document.querySelector('.ready1').classList.remove('checked')
-                }
-                if ((data.player2 || {}).ready) {
-                    document.querySelector('.ready2').classList.add('checked')
-                } else {
-                    document.querySelector('.ready2').classList.remove('checked')
-                }
 
-                // check for game start
-                if ((data.player1 || {}).ready && (data.player2 || {}).ready) {
-                    this.game.startDoublePlayer()
-                } else if ((data.player1 || {}).ready) {
-                    this.game.startSinglePlayer()
-                    document.querySelector('.ready2').classList.add('checked')
-                    document.querySelector('.ready2').textContent = 'AI'
-                } else if ((data.player1 || {}).ready === false || (data.player2 || {}).ready === false) {
-                    this.game.stop()
-                    dsClient.record.getRecord('status').set('winner', null)
-                    document.querySelector('.ready2').textContent = 'ready'
-                    this.start()
-                }
+            const status = dsClient.record.getRecord('status')
+            status.subscribe('player1-online', online => {
+              this.toggleChecked('.online-1', online)
+              this.updateGameStatus(online, status.get('player2-online'))
+            })
+            status.subscribe('player2-online', online => {
+              this.toggleChecked('.online-2', online)
+              this.updateGameStatus(status.get('player1-online'), online)
             })
         },
 
-        notifyWinner: function(playerNo) {
-            dsClient.record.getRecord('status').whenReady(status => {
-                status.set('winner', playerNo)
-            })
+        notifyGoal: function(playerNo, goals, lastGoal) {
+            const statusRecord = dsClient.record.getRecord('status')
+            if (lastGoal) {
+              statusRecord.set('player1-online', false)
+              statusRecord.set('player2-online', false)
+            }
+            statusRecord.set(`player${playerNo+1}-goals`, {amount: goals, lastGoal: lastGoal})
+        },
+
+        updateGameStatus: function(player1, player2) {
+          if (player1 && player2) {
+            this.game.stop()
+            this.game.startDoublePlayer()
+          } else {
+            this.game.stop()
+          }
+        },
+
+        toggleChecked: function(selector, value) {
+          const classList = document.querySelector(selector).classList
+          value ? classList.add('checked') : classList.remove('checked')
         },
 
         onkeydown: function(ev) { if (this.game.onkeydown) this.game.onkeydown(ev.keyCode); },

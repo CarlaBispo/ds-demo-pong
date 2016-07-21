@@ -74,8 +74,8 @@ const options = {
   correctLevel : QRCode.CorrectLevel.H
 }
 new QRCode(document.getElementById("qrcode1"), Object.assign({
-  text: window.location.host + '/controls#1'
+  text: window.location.origin + '/controls#1'
 }, options))
 new QRCode(document.getElementById("qrcode2"), Object.assign({
-  text: window.location.host + '/controls#2'
+  text: window.location.origin + '/controls#2'
 }, options))
