@@ -145,6 +145,7 @@ class Gamepad {
     ds.record.getRecord('status').whenReady(statusRecord => {
       const oldValue = statusRecord.get(`player${player}-online`)
       statusRecord.set(`player${player}-online`, !oldValue)
+      statusRecord.discard()
     })
   }
 }
