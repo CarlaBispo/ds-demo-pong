@@ -6,6 +6,8 @@ const FACTOR = defaults.tiltFactor;
 
 const DEEPSTREAM_HOST = process.env.DEEPSTREAM_HOST || window.location.hostname + ':6020'
 const player = window.location.hash.substr(1) || 1
+const otherPlayer = player == 1 ? 2 : 1
+console.log('other player', otherPlayer)
 
 class Gamepad {
   constructor() {
@@ -91,10 +93,10 @@ class Gamepad {
     const statusRecord = ds.record.getRecord('status')
     statusRecord.subscribe(`player${player}-online`, online => {
       if (online === true) {
-        document.body.style.background ='#ccc'
+        document.body.style.background = '#ccc'
         this.joinButton.textContent = 'leave'
       } else {
-        document.body.style.background ='white'
+        document.body.style.background = 'white'
         this.joinButton.textContent = 'join'
       }
     }, true)
@@ -102,9 +104,15 @@ class Gamepad {
       if ('vibrate' in navigator) {
         if (data.lastGoal) {
           navigator.vibrate([100, 300, 100, 300, 100])
+          document.body.style.background = 'green'
         } else {
           navigator.vibrate(100)
         }
+      }
+    })
+    statusRecord.subscribe(`player${otherPlayer}-goals`, data => {
+      if (data.lastGoal) {
+        document.body.style.background = 'red'
       }
     })
   }
