@@ -10,7 +10,9 @@ const keyMap = require('./keyMap.js');
 const sniffer = require('./sniffer.js');
 const GAME_ID = utils.getQueryStringAsObject().gameId
 
-client.login({}, (success) => {
+client.login({
+    user: 'server'
+}, (success) => {
     if (success) {
         if (window.location.search.indexOf('gameId') === -1) {
             return window.location.search = 'gameId=' + client.getUid().split('-')[1]

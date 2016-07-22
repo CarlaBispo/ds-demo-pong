@@ -151,7 +151,9 @@ class Gamepad {
 }
 
 // ignore authentication
-const client = deepstream(DEEPSTREAM_HOST).login({}, function(success) {
+const client = deepstream(DEEPSTREAM_HOST).login({
+  user: player
+}, function(success) {
   window.dsClient = client
   if (success) {
     return new Gamepad()

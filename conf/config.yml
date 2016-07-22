@@ -1,0 +1,16 @@
+# Connectivity
+webServerEnabled: true # accept incoming HTTP long-polling and websocket connections
+tcpServerEnabled: true # accept incoming TCP connections
+port: 6020 # port for the HTTP/websocket server
+host: 0.0.0.0 # host for the HTTP/websocket server
+tcpPort: 6021 # port for the TCP server
+tcpHost: 0.0.0.0 # host for the TCP server
+urlPath: /deepstream # url path HTTP/WEBSOCKET connections connect to
+
+# Permissioning
+permission:
+  type: config # Only config or custom permissionHandler at the moment
+  options:
+    path: ./permissions.yml # Path to the permissionFile. Can be json, js or yml
+    maxRuleIterations: 3 # Amount of times nested cross-references will be loaded. Avoids endless loops
+    cacheEvacuationInterval: 60000 # PermissionResults are cached to increase performance. Lower number means more loading

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "deepstream.io Pong",
   "scripts": {
-    "deepstream": "deepstream start -c node_modules/deepstream.io/conf/config.yml",
+    "deepstream": "deepstream start",
     "start": "budo src/index.js --live --serve dist/bundle.js -- -t babelify -t envify | opnr | garnish",
     "build": "browserify src/bootstrap.js -t babelify -t envify | uglifyjs > dist/bundle.js"
   },
