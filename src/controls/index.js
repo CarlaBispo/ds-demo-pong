@@ -2,11 +2,12 @@ const deepstream = require('deepstream.io-client-js')
 const defaults = require('../pongDefaults')
 const keyMap = require('../keyMap.js')
 const utils = require('../utils')
+const CONSTANTS = utils.getQueryStringAsObject()
+const GAME_ID = CONSTANTS.gameId
+const DEEPSTREAM_HOST = CONSTANTS.dsHost || process.env.DEEPSTREAM_HOST || window.location.hostname + ':6020'
 const IS_TOUCH_DEVICE = 'ontouchstart' in window
 const FACTOR = defaults.tiltFactor;
-const GAME_ID = utils.getQueryStringAsObject().gameId
 
-const DEEPSTREAM_HOST = process.env.DEEPSTREAM_HOST || window.location.hostname + ':6020'
 const player = window.location.hash.substr(1) || 1
 const otherPlayer = player == 1 ? 2 : 1
 
@@ -91,7 +92,8 @@ class Gamepad {
       return
     }
     this.accelerationValue = value;
-    const percentage = 1 - ((value / 10) + 1) / 2;
+    const percentage = 1 - (value/20) + (1/2)
+
     const amplified = window.innerHeight * (1 + FACTOR)
     let margin = Math.round(percentage * amplified - (window.innerHeight * FACTOR/2) - (this.indicatorHeight))
     if (margin < 0) {

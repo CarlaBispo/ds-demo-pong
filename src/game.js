@@ -4,11 +4,13 @@
 const deepstream = require('deepstream.io-client-js');
 const QRCode = require('qrcodejs2');
 const utils = require('./utils')
-const DEEPSTREAM_HOST = process.env.DEEPSTREAM_HOST || window.location.hostname + ':6020'
+const CONSTANTS = utils.getQueryStringAsObject()
+const GAME_ID = CONSTANTS.gameId
+const DEEPSTREAM_HOST = CONSTANTS.dsHost || process.env.DEEPSTREAM_HOST || window.location.hostname + ':6020'
 const client = deepstream(DEEPSTREAM_HOST)
 const keyMap = require('./keyMap.js');
 const sniffer = require('./sniffer.js');
-const GAME_ID = utils.getQueryStringAsObject().gameId
+
 
 client.login({
     user: 'server'
