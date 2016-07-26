@@ -1,19 +1,9 @@
+# matchID is just a random UUID for multiple "rooms"
 record:
-  "*-player/$id":
-    create: "user.id == $id"
+  "$matchID-player/$id":
+    create: "user.id == 'server'"
+    delete: "user.id == 'server'"
     write: "user.id == $id"
-    read: true
-    delete: "user.id == $id"
-  "*-status.$id-online":
-    create: "user.id == player$id || user.id == server"
-    write: "user.id == player$id || user.id == server"
-    read: true
-    delete: "user.id == player$id || user.id == server"
-  "*-status.$id-goals":
-    create: "user.id == server"
-    write: "user.id == server"
-    read: true
-    delete: "user.id == server"
   "*":
     create: true
     write: true

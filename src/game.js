@@ -13,7 +13,7 @@ const sniffer = require('./sniffer.js');
 
 
 client.login({
-    user: 'server'
+    username: 'server'
 }, (success) => {
     if (success) {
         if (window.location.search.indexOf('gameId') === -1) {
