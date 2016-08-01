@@ -17,7 +17,12 @@ client.login({
 }, (success) => {
     if (success) {
         if (window.location.search.indexOf('gameId') === -1) {
-            return window.location.search = 'gameId=' + client.getUid().split('-')[1]
+            const gameIdQueryString = 'gameId=' + client.getUid().split('-')[1]
+            if (window.location.search === '') {
+                return window.location.search = gameIdQueryString
+            } else {
+                return window.location.search += '&' + gameIdQueryString
+            }
         }
         initializeQrCodes()
     } else {
