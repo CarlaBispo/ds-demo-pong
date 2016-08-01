@@ -38,14 +38,14 @@ function initializeQrCodes() {
     }
     const code1Element = document.getElementById("qrcode1")
     const code2Element = document.getElementById("qrcode2")
-    code1Element.parentNode.href = code1Element.parentNode.href.replace('controls', `controls?gameId=${GAME_ID}`)
-    code2Element.parentNode.href = code2Element.parentNode.href.replace('controls', `controls?gameId=${GAME_ID}`)
+    code1Element.parentNode.href = code1Element.parentNode.href.replace('.html', `.html?gameId=${GAME_ID}`)
+    code2Element.parentNode.href = code2Element.parentNode.href.replace('.html', `.html?gameId=${GAME_ID}`)
 
     new QRCode(code1Element, Object.assign({
-      text: window.location.origin + `/controls?gameId=${GAME_ID}#1`
+      text: window.location.origin + `/controls.html?gameId=${GAME_ID}#1`
     }, options))
     new QRCode(code2Element, Object.assign({
-      text: window.location.origin + `/controls?gameId=${GAME_ID}#2`
+      text: window.location.origin + `/controls.html?gameId=${GAME_ID}#2`
     }, options))
 }
 
