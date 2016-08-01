@@ -5,7 +5,7 @@
   "scripts": {
     "deepstream": "deepstream start",
     "start": "budo src/index.js --live --serve dist/bundle.js -- -t babelify -t envify | opnr | garnish",
-    "build": "browserify src/bootstrap.js -t babelify -t envify | uglifyjs > dist/bundle.js"
+    "build": "browserify src/index.js -t babelify -t envify | uglifyjs > dist/bundle.js"
   },
   "repository": {
     "type": "git",
