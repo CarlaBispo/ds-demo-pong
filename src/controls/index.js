@@ -92,7 +92,7 @@ class Gamepad {
       return
     }
     this.accelerationValue = value;
-    const percentage = 1 - (value/20) + (1/2)
+    const percentage = 1 - (value/20) - (1/2)
 
     const amplified = window.innerHeight * (1 + FACTOR)
     let margin = Math.round(percentage * amplified - (window.innerHeight * FACTOR/2) - (this.indicatorHeight))
