@@ -43,14 +43,14 @@ function initializeQrCodes() {
     }
     const code1Element = document.getElementById("qrcode1")
     const code2Element = document.getElementById("qrcode2")
-    code1Element.parentNode.href = `/controls.html${window.location.search}#1`
-    code2Element.parentNode.href = `/controls.html${window.location.search}#2`
+    code1Element.parentNode.href = `controls.html${window.location.search}#1`
+    code2Element.parentNode.href = `controls.html${window.location.search}#2`
 
     new QRCode(code1Element, Object.assign({
-      text: window.location.origin + `/controls.html${window.location.search}#1`
+      text: code1Element.parentNode.href
     }, options))
     new QRCode(code2Element, Object.assign({
-      text: window.location.origin + `/controls.html${window.location.search}#2`
+      text: code2Element.parentNode.href
     }, options))
 }
 
