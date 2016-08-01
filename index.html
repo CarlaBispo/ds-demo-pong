@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>deepstream.io Pong</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link href="style/pong.css" media="screen, print" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="sidebar sidebar-right">
+    <h2>Player 2</h2>
+    <a target="_blank" href="#"><div class="qrcode" id="qrcode2"></div></a>
+    <div class="online online-2">online</div>
+  </div>
+  <div class="sidebar">
+    <h2>Player 1</h2>
+    <a target="_blank" href="#"><div class="qrcode" id="qrcode1"></div></a>
+    <div class="online online-1">online</div>
+  </div>
+
+  <div class="settings-container">
+    <div class='settings'>
+      <label for='sound'>Sound: </label>
+      <input type='checkbox' id='sound'>
+    </div>
+
+    <div class='settings'>
+      <label for='footprints'>Footprints: </label>
+      <input type='checkbox' id='footprints'>
+    </div>
+
+    <div class='settings'>
+      <label for='predictions'>AI predictions: </label>
+      <input type='checkbox' id='predictions'>
+    </div>
+
+  </div>
+
+  <canvas id="game">
+    <div id="unsupported">
+      Sorry, this example cannot be run because your browser does not support the &lt;canvas&gt; element
+    </div>
+  </canvas>
+
+  <script src="dist/bundle.js" type="text/javascript"></script>
+</body>
+</html>
