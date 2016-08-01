@@ -6,7 +6,7 @@ const CONSTANTS = utils.getQueryStringAsObject()
 const GAME_ID = CONSTANTS.gameId
 const DEEPSTREAM_HOST = CONSTANTS.dsHost || process.env.DEEPSTREAM_HOST || window.location.hostname + ':6020'
 const IS_TOUCH_DEVICE = 'ontouchstart' in window
-const FACTOR = defaults.tiltFactor;
+const FACTOR = defaults.tiltFactor
 
 const player = window.location.hash.substr(1) || 1
 const otherPlayer = player == 1 ? 2 : 1
@@ -20,7 +20,7 @@ class Gamepad {
     if (IS_TOUCH_DEVICE && window.DeviceMotionEvent != null) {
       this.indicatorHeight = this.indicator.style.height
       this.accelerationValue = 0
-      window.addEventListener('devicemotion', this.listenOnMotion.bind(this), false);
+      window.addEventListener('devicemotion', this.listenOnMotion.bind(this), false)
       document.querySelector('.gamepad-container').style.display = 'none'
     } else {
       this.indicator.style.display = 'none'
@@ -85,13 +85,13 @@ class Gamepad {
     if (e.accelerationIncludingGravity.y == null) {
       return
     }
-    const landscapeOrientation = window.innerWidth / window.innerHeight > 1;
-    const value = landscapeOrientation ? e.accelerationIncludingGravity.x : e.accelerationIncludingGravity.y;
+    const landscapeOrientation = window.innerWidth / window.innerHeight > 1
+    const value = landscapeOrientation ? e.accelerationIncludingGravity.x : e.accelerationIncludingGravity.y
 
     if (Math.abs(this.accelerationValue - value) <= defaults.accelerationThreshold) {
       return
     }
-    this.accelerationValue = value;
+    this.accelerationValue = value
     const percentage = 1 - (value/20) - (1/2)
 
     const amplified = window.innerHeight * (1 + FACTOR)
@@ -104,7 +104,7 @@ class Gamepad {
     }
 
     this.indicator.style['margin-top'] = margin + 'px'
-    this.record.set('position', percentage);
+    this.record.set('position', percentage)
   }
 
   onkeydown(e) {
