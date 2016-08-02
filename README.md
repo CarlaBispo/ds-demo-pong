@@ -6,7 +6,8 @@ This is a fork of [gburnett/javascript-pong](https://github.com/gburnett/javascr
 All frontend credits goes to [jakesgordon](https://github.com/jakesgordon).
 
 ## Play online
-Play now without setup on http://rawgit.com/deepstreamIO/ds-demo-pong/gh-pages/index.html?dsHost=52.29.229.244:6020
+Play now without setup on  
+http://rawgit.com/deepstreamIO/ds-demo-pong/gh-pages/index.html?dsHost=52.29.229.244:6020
 
 ## Local setup
 
@@ -21,7 +22,7 @@ npm start # in another terminal
 If you want to change the deepstream host you can set this env variable:
 
 ###### `DEEPSTREAM_HOST` (with port)
-Defaults value: `<BROWSER_HOSTNAME>:6020`.
+Default value: `<IP_OR_HOSTNAME>:6020`.
 
 If you want to allow users to connect to your server within your WiFi network
 just check your WiFi IP adresss by `ifconfig` or `ipconfig` and set the env variable:
@@ -29,3 +30,5 @@ just check your WiFi IP adresss by `ifconfig` or `ipconfig` and set the env vari
 ```shell
 DEEPSTREAM_HOST=192.168.100.1:6020 npm start
 ```
+
+You can also set the deepstream host in the url at runtime as a query string `?dsHost=192.168.100.1:6020`.
