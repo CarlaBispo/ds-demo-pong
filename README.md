@@ -5,7 +5,10 @@ This is a fork of [gburnett/javascript-pong](https://github.com/gburnett/javascr
 
 All frontend credits goes to [jakesgordon](https://github.com/jakesgordon).
 
-## Setup
+## Play online
+Play now without setup on http://rawgit.com/deepstreamIO/ds-demo-pong/gh-pages/index.html?dsHost=52.29.229.244:6020
+
+## Local setup
 
 ```shell
 npm install
