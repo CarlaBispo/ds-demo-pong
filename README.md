@@ -1,6 +1,8 @@
 deepstreamio.io Pong
 ===========
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/deepstreamIO/ds-demo-pong.svg)](https://greenkeeper.io/)
+
 This is a fork of [gburnett/javascript-pong](https://github.com/gburnett/javascript-pong) which is a fork of [jakesgordon/javascript-pong](https://github.com/jakesgordon/javascript-pong), a tutorial for implementing a Pong game.
 
 All frontend credits goes to [jakesgordon](https://github.com/jakesgordon).
